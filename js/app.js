@@ -39,13 +39,13 @@ var Player = function(){
 
     this.sprite = 'images/char-boy.png';
 
-    this.x = retrieveXPosition(this.xPosition);
-    this.y = retrieveYPosition(this.yPosition);
+    this.x = retrieveXReal(this.xPosition);
+    this.y = retrieveYReal(this.yPosition);
 };
 
 Player.prototype.update = function(){
-    this.x = retrieveXPosition(this.xPosition);
-    this.y = retrieveYPosition(this.yPosition);
+    this.x = retrieveXReal(this.xPosition);
+    this.y = retrieveYReal(this.yPosition);
     var currentX = this.x;
     var currentY = this.y;
     var shouldReset = false;
@@ -56,8 +56,9 @@ Player.prototype.update = function(){
         var enemyYMinColision = enemy.y;
         var enemyXMaxColision = enemy.y + 171;
 
-        if((currentX > enemy.x && currentX < (enemy.x + 101))
-            && (currentY > enemy.y && currentY < (enemy.y + 90))) {
+        if(((currentX > enemy.x && currentX < (enemy.x + 101 - 20))
+            || ((currentX + 101 - 20) > enemy.x) && currentX < (enemy.x + 101 - 20))
+            && (currentY === enemy.y )) {
             shouldReset = true;
         }
     });
@@ -105,10 +106,10 @@ Player.prototype.handleInput = function(key) {
 
 };
 
-var retrieveYPosition = function(h){
+var retrieveYReal = function(h){
     return (83*h - 20);
 };
-var retrieveXPosition = function(w){
+var retrieveXReal = function(w){
     return (100*w);
 };
 
@@ -118,15 +119,15 @@ var createEnemies = function(size){
 
     for (i = 0; i < size; i++) {
         var speed = Math.floor((Math.random() * 400) + 100);
-        var x = Math.floor((Math.random() * 400) - 100);
+        var xReal = Math.floor((Math.random() * 400) - 100);
         var y = Math.floor((Math.random() * 3) + 1);
-        enemies.push(new Enemy(speed, x, retrieveYPosition(y)));
+        enemies.push(new Enemy(speed, xReal, retrieveYReal(y)));
     }
     return enemies;
 }
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
-var allEnemies = createEnemies(1);
+var allEnemies = createEnemies(5);
 // Place the player object in a variable called player
 
 var player = new Player();
