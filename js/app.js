@@ -113,7 +113,6 @@ var retrieveXReal = function(w){
     return (100*w);
 };
 
-
 var createEnemies = function(size){
     var enemies = [];
 
