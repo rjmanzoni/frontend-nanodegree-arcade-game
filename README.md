@@ -10,5 +10,5 @@ Just open de index.html to run de game on a browser that suports HTML5.
 
 #Play the Game
 Use the key **'up'**, **'down'**, **'left'** and **'right'** to move de player.
--You win when reach de river above.
--You lose if the enemy toch you.
+- You win when reach de river above.
+- You lose if the enemy toch you.
