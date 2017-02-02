@@ -1,7 +1,7 @@
 #How to Run
 *Your browser need supports HTML5*
 
-Just open de index.html in the browser or run `python -m SimpleHTTPServer` in game directory and open the browser on `localhost:8000`
+Just open the index.html in the browser or run `python -m SimpleHTTPServer` and open the browser on `localhost:8000`
 
 
 #Play the Game
