@@ -6,9 +6,13 @@ Students should use this [rubric](https://review.udacity.com/#!/projects/2696458
 For detailed instructions on how to get started, check out this [guide](https://docs.google.com/document/d/1v01aScPjSWCCWQLIpFqvg3-vXLH2e8_SZQKC8jNO0Dc/pub?embedded=true).
 
 #How to Run
-Just open de index.html to run de game on a browser that suports HTML5.
+*Your browser need supports HTML5*
+Just open de index.html in the browser or run `python -m SimpleHTTPServer` in game directory and open the browser on `localhost:8000`
+
 
 #Play the Game
 Use the key **'up'**, **'down'**, **'left'** and **'right'** to move de player.
 - You win when reach de river above.
 - You lose if the enemy toch you.
+
+######This game was developed by @rjmanzoni
