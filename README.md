@@ -1,6 +1,3 @@
-frontend-nanodegree-arcade-game
-===============================
-
 #How to Run
 *Your browser need supports HTML5*
 
