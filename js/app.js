@@ -39,13 +39,13 @@ var Player = function(sprite){
 Player.prototype = Object.create(Root.prototype);
 Player.prototype.constructor = Player;
 
-Player.prototype.update = function(){
+Player.prototype.checkCollisions = function(allEnemies){
     this.x = retrieveXReal(this.xPosition);
     this.y = retrieveYReal(this.yPosition);
     var currentX = this.x;
     var currentY = this.y;
-    var shouldReset = false;
 
+    var shouldReset = false;
     allEnemies.forEach(function(enemy){
         var enemyXMinColision = enemy.x;
         var enemyXMaxColision = enemy.x + 101;
@@ -58,8 +58,11 @@ Player.prototype.update = function(){
             shouldReset = true;
         }
     });
+    return shouldReset;
+}
 
-    if(shouldReset){
+Player.prototype.update = function(){
+    if(this.checkCollisions(allEnemies)){
         this.xPosition = this.initXPosition;
         this.yPosition = this.initYPosition;
     }
