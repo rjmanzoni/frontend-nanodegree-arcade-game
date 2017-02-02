@@ -86,13 +86,17 @@ Player.prototype.handleInput = function(key) {
             break;
         default:
     }
+    //max Player X position
     if(x > 4){
         x = 4;
+    //min Player X position
     }else if (x < 0){
         x = 0;
     }
+    //min Player Y position
     if(y > 5){
         y = 5;
+    //max Player Y position
     }else if (y < 1){
         x = this.initXPosition;
         y = this.initYPosition;
