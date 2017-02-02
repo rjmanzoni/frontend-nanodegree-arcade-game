@@ -1,47 +1,43 @@
-// Enemies our player must avoid
-var Enemy = function(speed, initX, initY) {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
-
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
-    this.sprite = 'images/enemy-bug.png';
-    this.speed = speed;
+var Root = function(sprite, initX, initY){
+    this.sprite = sprite;
     this.x = initX;
     this.y = initY;
-};
+}
 
-// Update the enemy's position, required method for game
-// Parameter: dt, a time delta between ticks
-Enemy.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
-    this.x = this.x + this.speed*dt;
-
-    if(this.x > 600){
-        this.x = -200;
-    }
-};
-
-// Draw the enemy on the screen, required method for game
-Enemy.prototype.render = function() {
+Root.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
-
-var Player = function(){
-    this.xPosition = 2;
-    this.yPosition = 5;
-
-    this.sprite = 'images/char-boy.png';
-
-    this.x = retrieveXReal(this.xPosition);
-    this.y = retrieveYReal(this.yPosition);
+var Enemy = function(sprite, speed, initX, initY) {
+    Root.call(this, sprite, initX, initY);
+    this.speed = speed;
+    this.maxWidthScreen = 600;
+    this.minWidthScreen = -200;
 };
+Enemy.prototype = Object.create(Root.prototype);
+Enemy.prototype.constructor = Enemy;
+
+Enemy.prototype.update = function(dt) {
+    this.x = this.x + this.speed*dt;
+
+    if(this.x > this.maxWidthScreen){
+        this.x = this.minWidthScreen;
+    }
+};
+
+var Player = function(sprite){
+    // inital player position
+    this.initXPosition = 2;
+    this.initYPosition = 5;
+
+    this.xPosition = this.initXPosition;
+    this.yPosition = this.initYPosition;
+
+    Root.call(this, sprite, retrieveXReal(this.xPosition), retrieveYReal(this.yPosition));
+};
+
+Player.prototype = Object.create(Root.prototype);
+Player.prototype.constructor = Player;
 
 Player.prototype.update = function(){
     this.x = retrieveXReal(this.xPosition);
@@ -62,14 +58,11 @@ Player.prototype.update = function(){
             shouldReset = true;
         }
     });
-    if(shouldReset){
-        this.xPosition = 2;
-        this.yPosition = 5;
-    }
-};
 
-Player.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    if(shouldReset){
+        this.xPosition = this.initXPosition;
+        this.yPosition = this.initYPosition;
+    }
 };
 
 Player.prototype.handleInput = function(key) {
@@ -97,8 +90,9 @@ Player.prototype.handleInput = function(key) {
     }
     if(y > 5){
         y = 5;
-    }else if (y < 0){
-        y = 0;
+    }else if (y < 1){
+        x = this.initXPosition;
+        y = this.initYPosition;
     }
 
     this.xPosition = x;
@@ -120,19 +114,15 @@ var createEnemies = function(size){
         var speed = Math.floor((Math.random() * 400) + 100);
         var xReal = Math.floor((Math.random() * 400) - 100);
         var y = Math.floor((Math.random() * 3) + 1);
-        enemies.push(new Enemy(speed, xReal, retrieveYReal(y)));
+        enemies.push(new Enemy('images/enemy-bug.png', speed, xReal, retrieveYReal(y)));
     }
     return enemies;
 }
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
+
 var allEnemies = createEnemies(5);
-// Place the player object in a variable called player
 
-var player = new Player();
+var player = new Player('images/char-boy.png');
 
-// This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
         37: 'left',
