@@ -46,6 +46,7 @@ Player.prototype.checkCollisions = function(allEnemies){
     var currentY = this.y;
 
     var shouldReset = false;
+
     allEnemies.forEach(function(enemy){
         var enemyXMinColision = enemy.x;
         var enemyXMaxColision = enemy.x + 101;
@@ -104,6 +105,7 @@ Player.prototype.handleInput = function(key) {
 
     this.xPosition = x;
     this.yPosition = y;
+    this.update();
 
 };
 
