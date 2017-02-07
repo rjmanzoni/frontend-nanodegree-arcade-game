@@ -62,6 +62,14 @@ Player.prototype.checkCollisions = function(allEnemies){
     return shouldReset;
 }
 
+
+Player.prototype.checkWin = function(){
+    if (this.yPosition == 0){
+        return true;
+    }
+    return false;
+}
+
 Player.prototype.update = function(){
     if(this.checkCollisions(allEnemies)){
         this.xPosition = this.initXPosition;
@@ -85,6 +93,10 @@ Player.prototype.handleInput = function(key) {
         case 'down':
             y++;
             break;
+        case 'space':
+            init();
+            break;
+
         default:
     }
     //max Player X position
@@ -98,15 +110,15 @@ Player.prototype.handleInput = function(key) {
     if(y > 5){
         y = 5;
     //max Player Y position
-    }else if (y < 1){
-        x = this.initXPosition;
-        y = this.initYPosition;
     }
 
     this.xPosition = x;
     this.yPosition = y;
     this.update();
+    if(this.checkWin()){
+        console.log(win);
 
+    }
 };
 
 var retrieveYReal = function(h){
@@ -134,6 +146,7 @@ var player = new Player('images/char-boy.png');
 
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
+        32: 'space',
         37: 'left',
         38: 'up',
         39: 'right',
