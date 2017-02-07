@@ -116,8 +116,6 @@ Player.prototype.handleInput = function(key) {
     this.yPosition = y;
     this.update();
     if(this.checkWin()){
-        console.log(win);
-
     }
 };
 
