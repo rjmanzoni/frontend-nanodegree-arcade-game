@@ -1,3 +1,10 @@
+ const MAX_SCREEN = 600;
+ const MIN_SCREEN = -200;
+
+ const IMAGE_WIDTH = 101
+ const IMAGE_HEIGHT = 171
+ const DELTA = 20;
+
 var Root = function(sprite, initX, initY){
     this.sprite = sprite;
     this.x = initX;
@@ -6,13 +13,14 @@ var Root = function(sprite, initX, initY){
 
 Root.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    updateScore();
 };
 
 var Enemy = function(sprite, speed, initX, initY) {
     Root.call(this, sprite, initX, initY);
     this.speed = speed;
-    this.maxWidthScreen = 600;
-    this.minWidthScreen = -200;
+    this.maxWidthScreen = MAX_SCREEN;
+    this.minWidthScreen = MIN_SCREEN;
 };
 Enemy.prototype = Object.create(Root.prototype);
 Enemy.prototype.constructor = Enemy;
@@ -26,6 +34,8 @@ Enemy.prototype.update = function(dt) {
 };
 
 var Player = function(sprite){
+    this.win = 0;
+    this.loss = 0;
     // inital player position
     this.initXPosition = 2;
     this.initYPosition = 5;
@@ -47,19 +57,22 @@ Player.prototype.checkCollisions = function(allEnemies){
 
     var shouldReset = false;
 
-    allEnemies.forEach(function(enemy){
-        var enemyXMinColision = enemy.x;
-        var enemyXMaxColision = enemy.x + 101;
-        var enemyYMinColision = enemy.y;
-        var enemyXMaxColision = enemy.y + 171;
+    for(var enemy in allEnemies){
+        //estas quatro variaveis representam os limites da imagem
+        var enemyXMinColision = allEnemies[enemy].x;
+        var enemyXMaxColision = allEnemies[enemy].x + IMAGE_WIDTH;
+        var enemyYMinColision = allEnemies[enemy].y;
+        var enemyXMaxColision = allEnemies[enemy].y + IMAGE_HEIGHT;
 
-        if(((currentX > enemy.x && currentX < (enemy.x + 101 - 20))
-            || ((currentX + 101 - 20) > enemy.x) && currentX < (enemy.x + 101 - 20))
-            && (currentY === enemy.y )) {
-            shouldReset = true;
+        //verifica que os limites do player colide com os limites do enemy
+        // DELTA representa um valor a ser subtraído para que a colisão seja mais visível
+        if(((currentX > allEnemies.x && currentX < (allEnemies[enemy].x + IMAGE_WIDTH - DELTA))
+            || ((currentX + IMAGE_WIDTH - DELTA) > allEnemies[enemy].x) && currentX < (allEnemies[enemy].x + IMAGE_WIDTH - DELTA))
+            && (currentY === allEnemies[enemy].y )) {
+            return true;
         }
-    });
-    return shouldReset;
+    }
+    return false;
 }
 
 
@@ -74,31 +87,31 @@ Player.prototype.update = function(){
     if(this.checkCollisions(allEnemies)){
         this.xPosition = this.initXPosition;
         this.yPosition = this.initYPosition;
+        this.loss++;
+    }
+    if(this.checkWin()){
+        this.win++;
+        this.xPosition  = this.initXPosition;
+        this.yPosition  = this.initYPosition;
     }
 };
 
 Player.prototype.handleInput = function(key) {
     var x = this.xPosition;
     var y = this.yPosition;
-    switch(key){
-        case 'left':
-            x--;
-            break;
-        case 'up':
-            y--;
-            break;
-        case 'right':
-            x++;
-            break;
-        case 'down':
-            y++;
-            break;
-        case 'space':
-            init();
-            break;
-
-        default:
+    if(key === 'left'){
+        x--;
     }
+    if(key === 'up'){
+         y--;
+    }
+    if(key === 'right'){
+        x++;
+    }
+    if(key === 'down'){
+        y++;
+    }
+
     //max Player X position
     if(x > 4){
         x = 4;
@@ -110,18 +123,20 @@ Player.prototype.handleInput = function(key) {
     if(y > 5){
         y = 5;
     //max Player Y position
+    }else if(y < 0){
+        y = 0;
     }
 
     this.xPosition = x;
     this.yPosition = y;
     this.update();
-    if(this.checkWin()){
-    }
 };
 
+/* funcao que converta uma posicao logica para uma posicao na tela do canvas no eixo Y*/
 var retrieveYReal = function(h){
     return (83*h - 20);
 };
+/* funcao que converta uma posicao logica para uma posicao na tela do canvas no eixo X*/
 var retrieveXReal = function(w){
     return (100*w);
 };
@@ -138,13 +153,19 @@ var createEnemies = function(size){
     return enemies;
 }
 
+var updateScore = function(){
+    ctx.font = "20px Arial";
+    ctx.fillText("Win: "+player.win,10,30);
+    ctx.fillText("Loss: "+player.loss,150,30);
+}
+
+
 var allEnemies = createEnemies(5);
 
 var player = new Player('images/char-boy.png');
 
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
-        32: 'space',
         37: 'left',
         38: 'up',
         39: 'right',
