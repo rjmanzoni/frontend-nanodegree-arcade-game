@@ -1,9 +1,12 @@
- const MAX_SCREEN = 600;
- const MIN_SCREEN = -200;
+//limite maximo que o enemy pode correr
+const MAX_SCREEN = 600;
+//limite minimo que o enemy começa correr
+const MIN_SCREEN = -200;
 
- const IMAGE_WIDTH = 101
- const IMAGE_HEIGHT = 171
- const DELTA = 20;
+//enemy ou player tem tamanos 101 x 171
+const IMAGE_WIDTH = 101
+const IMAGE_HEIGHT = 171
+const DELTA = 20;
 
 var Root = function(sprite, initX, initY){
     this.sprite = sprite;
@@ -58,7 +61,7 @@ Player.prototype.checkCollisions = function(allEnemies){
     var shouldReset = false;
 
     for(var enemy in allEnemies){
-        //estas quatro variaveis representam os limites da imagem
+        //estas quatro variaveis representam os limites da imagem do enemy
         var enemyXMinColision = allEnemies[enemy].x;
         var enemyXMaxColision = allEnemies[enemy].x + IMAGE_WIDTH;
         var enemyYMinColision = allEnemies[enemy].y;
